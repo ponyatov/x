@@ -14,6 +14,8 @@ struct Sym {
 	virtual string dump(int=0); virtual string tagval(); string pad(int);
 };
 
+struct Op: Sym { Op(string); };
+
 extern int yylex();
 extern int yylineno;
 extern char* yytext;

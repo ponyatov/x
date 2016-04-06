@@ -4,4 +4,10 @@
 %option noyywrap
 %option yylineno
 %%
+[a-zA-Z0-9_.?]+		TOC(Sym,SYM)
+
+\=					TOC(Op,EQ)
+\+					TOC(Op,ADD)
+
+[ \t\r\n]+			{}
 %%

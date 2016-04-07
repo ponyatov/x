@@ -12,13 +12,14 @@ struct Sym {
 	string tag,val;
 	Sym(string,string); Sym(string);
 	vector<Sym*> nest; void push(Sym*o);
-	map<string,Sym*> pars;
+	map<string,Sym*> pars; void par(Sym*);
 	virtual string tagval(); string tagstr();
 	virtual string dump(int=0); string pad(int);
+	virtual string str();
 	virtual Sym* eval();
 	virtual Sym* eq(Sym*);
 	virtual Sym* at(Sym*);
-//	virtual Sym* add(Sym*);
+	virtual Sym* add(Sym*);
 	static Sym* fn_h(Sym*); virtual Sym* h();
 	static Sym* fn_c(Sym*); virtual Sym* c();
 	virtual Sym* colon(Sym*);
@@ -28,12 +29,16 @@ struct Sym {
 extern map<string,Sym*> env;
 extern void env_init();
 
-struct Str: Sym { Str(string); string tagval(); };
+struct Str: Sym { Str(string); string tagval(); Sym*add(Sym*); };
+
+struct List: Sym { List(); Sym*c(); };
 
 struct Op: Sym { Op(string); Sym*eval(); Sym*c(); };
 
 typedef Sym*(*FN)(Sym*);
 struct Fn: Sym { Fn(string,FN); FN fn; Sym*at(Sym*); };
+
+struct Lambda: Sym { Lambda(); Sym*eval(); };
 
 struct Class: Sym { Class(string,string); Sym*colon(Sym*); };
 

@@ -1,6 +1,7 @@
 *~
 *.swp
 exe.exe
+test.*
 log.log
 ypp.tab.?pp
 lex.yy.c

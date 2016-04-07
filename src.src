@@ -1,3 +1,37 @@
+c@[''
+	'#include <iostream>'
+	'#include <cmath>'
+	'using namespace std;'
+	''
+	'int main() {'
+	'cout<<' 
+c@~((1)+(((2)/(3))*((4)^(5))))
+	'<<endl;'
+	'}'
+]
+
+.end
+
+main = {X:
+	'\n#include <iostream>\n' +
+	'#include <cmath>\n' +
+	'using namespace std;\n' +
+	'\n' +
+	'int main() {\n\tcout << ' +
+X +
+	' << endl;\n}\n' 
+}
+
+.end
+
+c@~(1+2/3*4^5) +
+
+
+.end
+
+'#include <cmath>\nint main() {\n\tprintf("%f\\n",' + c@ ~( sin@() ) + ');\n}'
+
+.end
 
 Sym = class:Sym
 Sym:Str

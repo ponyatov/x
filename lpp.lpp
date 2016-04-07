@@ -11,6 +11,7 @@ string LexString;
 
 '					{BEGIN(lexstring); LexString="";}
 <lexstring>'		{BEGIN(INITIAL); yylval.o = new Str(LexString); return STR;}
+<lexstring>\\\\		{LexString+="\\";}
 <lexstring>\\t		{LexString+="\t";}
 <lexstring>\\n		{LexString+="\n";}
 <lexstring>\n		{LexString+=yytext[0];}
@@ -32,6 +33,10 @@ string LexString;
 \%					TOC(Op,PERC)
 
 \+					TOC(Op,ADD)
+\-					TOC(Op,SUB)
+\*					TOC(Op,MUL)
+\/					TOC(Op,DIV)
+\^					TOC(Op,POW)
 
 [ \t\r\n]+			{}
 %%

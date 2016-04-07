@@ -2,13 +2,23 @@
 #include "hpp.hpp"
 %}
 %defines %union { Sym*o; }
-%token <o> SYM
-%token <o> EQ ADD
-%type <o> ex
+%token <o> SYM NUM STR			/* scalars */
+%token <o> LP RP LQ RQ LC RC	/* brackets: () [] {} */
+%token <o> EQ AT TILD			/* operators: = @ ~ */
+%token <o> ADD
+%type <o> ex scalar
+
+%left ADD
+%left AT
+%left TILD
 %%
-REPL : | REPL ex { cout << $2->dump() << "\n"; } ;
-ex : SYM
+REPL : | REPL ex { cout << $2->eval()->dump() << "\n"; } ;
+scalar : SYM | NUM | STR ;
+ex : scalar
+	| LP ex RP		{ $$=$2; }
+	| TILD ex		{ $$=$1; $$->push($2); }
 	| ex EQ ex		{ $$=$2; $$->push($1); $$->push($3); }
+	| ex AT ex		{ $$=$2; $$->push($1); $$->push($3); }
 	| ex ADD ex		{ $$=$2; $$->push($1); $$->push($3); }
 ;
-%% 
+%%

@@ -2,6 +2,7 @@
 #define _H_X
 
 #include <iostream>
+#include <sstream>
 #include <cstdlib>
 #include <vector>
 #include <map>
@@ -11,10 +12,25 @@ struct Sym {
 	string tag,val;
 	Sym(string,string); Sym(string);
 	vector<Sym*> nest; void push(Sym*o);
-	virtual string dump(int=0); virtual string tagval(); string pad(int);
+	virtual string tagval(); string tagstr();
+	virtual string dump(int=0); string pad(int);
+	virtual Sym* eval();
+	virtual Sym* eq(Sym*);
+	virtual Sym* at(Sym*);
+//	virtual Sym* add(Sym*);
+	static Sym* fn_h(Sym*); virtual Sym* h();
+	static Sym* fn_c(Sym*); virtual Sym* c();
 };
 
-struct Op: Sym { Op(string); };
+extern map<string,Sym*> env;
+extern void env_init();
+
+struct Str: Sym { Str(string); string tagval(); };
+
+struct Op: Sym { Op(string); Sym*eval(); Sym*c(); };
+
+typedef Sym*(*FN)(Sym*);
+struct Fn: Sym { Fn(string,FN); FN fn; Sym*at(Sym*); };
 
 extern int yylex();
 extern int yylineno;

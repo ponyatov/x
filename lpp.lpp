@@ -4,9 +4,22 @@
 %option noyywrap
 %option yylineno
 %%
+
+^\.end				{yyterminate();}
+
 [a-zA-Z0-9_.?]+		TOC(Sym,SYM)
 
+\(					TOC(Op,LP)
+\)					TOC(Op,RP)
+\[					TOC(Op,LQ)
+\]					TOC(Op,RQ)
+\{					TOC(Op,LC)
+\}					TOC(Op,RC)
+
 \=					TOC(Op,EQ)
+\@					TOC(Op,AT)
+\~					TOC(Op,TILD)
+
 \+					TOC(Op,ADD)
 
 [ \t\r\n]+			{}

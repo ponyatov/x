@@ -1,6 +1,14 @@
 
+
+
+c@(A+B)
+
+.end
+
 A = B
 
 A + B
 
- 
+h@A c@B
+
+c@(~A+B)

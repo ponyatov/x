@@ -1,6 +1,6 @@
 
-'yo ho
-\t hoh o\n'
+Sym = class:Sym
+Sym:Str
 
 .end
 

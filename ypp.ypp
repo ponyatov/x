@@ -5,6 +5,7 @@
 %token <o> SYM NUM STR			/* scalars */
 %token <o> LP RP LQ RQ LC RC	/* brackets: () [] {} */
 %token <o> EQ AT TILD			/* operators: = @ ~ */
+%token <o> COLON PERC			/* : % */
 %token <o> ADD
 %type <o> ex scalar
 
@@ -19,6 +20,8 @@ ex : scalar
 	| TILD ex		{ $$=$1; $$->push($2); }
 	| ex EQ ex		{ $$=$2; $$->push($1); $$->push($3); }
 	| ex AT ex		{ $$=$2; $$->push($1); $$->push($3); }
+	| ex COLON ex	{ $$=$2; $$->push($1); $$->push($3); }
+	| ex PERC ex	{ $$=$2; $$->push($1); $$->push($3); }
 	| ex ADD ex		{ $$=$2; $$->push($1); $$->push($3); }
 ;
 %%

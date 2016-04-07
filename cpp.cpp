@@ -10,6 +10,8 @@ void Sym::push(Sym*o) { nest.push_back(o); }
 string Sym::pad(int n) { string S; for (int i=0;i<n;i++) S+='\t'; return S; }
 string Sym::tagval() { return "<"+tag+":"+val+">"; }
 string Sym::dump(int depth) { string S = "\n"+pad(depth)+tagval();
+	for (auto pr=pars.begin(),e=pars.end();pr!=e;pr++)
+		S += "," + pr->first + "=" + pr->second->tagval();
 	for (auto it=nest.begin(),e=nest.end();it!=e;it++)
 		S += (*it)->dump(depth+1);
 	return S; }
@@ -23,6 +25,9 @@ Sym* Sym::eval() {
 
 Sym* Sym::eq(Sym*o) { env[val]=o; return o; }
 Sym* Sym::at(Sym*o) { push(o); return this; }
+
+Sym* Sym::colon(Sym*o) { push(o); return this; }
+Sym* Sym::perc(Sym*o) { push(o); return this; }
 
 Sym* Sym::fn_h(Sym*o) { return o->h(); }
 Sym* Sym::fn_c(Sym*o) { return o->c(); }
@@ -46,6 +51,8 @@ Sym* Op::eval() {
 	if (val=="~") return nest[0]; else Sym::eval();
 	if (val=="=") return nest[0]->eq(nest[1]);
 	if (val=="@") return nest[0]->at(nest[1]);
+	if (val==":") return nest[0]->colon(nest[1]);
+	if (val=="%") return nest[0]->perc(nest[1]);
 	return this;
 }
 Sym* Op::c() { ostringstream os;
@@ -57,8 +64,16 @@ Sym* Op::c() { ostringstream os;
 Fn::Fn(string V, FN F):Sym("fn",V) { fn=F; }
 Sym* Fn::at(Sym*o) { return fn(o); }
 
+Class::Class(string T, string V):Sym(T,V) {}
+Sym* Class::colon(Sym*o) {
+	Class*C = new Class(val,o->val); C->pars["super"]=this;
+	return C; }
+
+Class base("class","class");
+
 map<string,Sym*> env;
 void env_init() {
 	env["h"] = new Fn("h",Sym::fn_h);
 	env["c"] = new Fn("c",Sym::fn_c);
+	env["class"] = &base; base.pars["super"]=&base;
 }

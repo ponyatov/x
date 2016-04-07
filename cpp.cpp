@@ -30,7 +30,14 @@ Sym* Sym::fn_c(Sym*o) { return o->c(); }
 Sym* Sym::h() { return new Str("extern Sym "+val+";"); }
 Sym* Sym::c() { return new Str(val); }
 string Str::tagval() { return tagstr(); }
-string Sym::tagstr() { return "'"+val+"'"; }
+string Sym::tagstr() { string S = "'";
+	for (int i=0,e=val.length();i!=e;i++)
+		switch (val[i]) {
+		case '\t': S+="\\t"; break;
+		case '\n': S+="\\n"; break;
+		default: S+=val[i];
+		}
+	return S+"'"; }
 
 Str::Str(string V):Sym("str",V) {}
 
